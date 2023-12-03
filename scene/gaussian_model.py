@@ -52,6 +52,7 @@ class GaussianModel:
         self._opacity = torch.empty(0)
         self.max_radii2D = torch.empty(0)
         self.xyz_gradient_accum = torch.empty(0)
+        print(self.xyz_gradient_accum)
         self.denom = torch.empty(0)
         self.optimizer = None
         self.percent_dense = 0
@@ -403,5 +404,7 @@ class GaussianModel:
         torch.cuda.empty_cache()
 
     def add_densification_stats(self, viewspace_point_tensor, update_filter):
+        # print('before_call',self.xyz_gradient_accum)
+        print(self.xyz_gradient_accum[update_filter] )
         self.xyz_gradient_accum[update_filter] += torch.norm(viewspace_point_tensor.grad[update_filter,:2], dim=-1, keepdim=True)
         self.denom[update_filter] += 1
