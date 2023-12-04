@@ -55,7 +55,7 @@ class GaussianModel:
         print(self.xyz_gradient_accum)
         self.denom = torch.empty(0)
         self.optimizer = None
-        self.percent_dense = 0
+        self.percent_dense = 0 # used for pruning
         self.spatial_lr_scale = 0
         self.setup_functions()
 
@@ -123,7 +123,7 @@ class GaussianModel:
             self.active_sh_degree += 1
 
     def create_from_pcd(self, pcd : BasicPointCloud, spatial_lr_scale : float):
-        self.spatial_lr_scale = spatial_lr_scale
+        self.spatial_lr_scale = spatial_lr_scale # all lr are multipled by this factor
         fused_point_cloud = torch.tensor(np.asarray(pcd.points)).float().cuda()
         fused_color = RGB2SH(torch.tensor(np.asarray(pcd.colors)).float().cuda())
         features = torch.zeros((fused_color.shape[0], 3, (self.max_sh_degree + 1) ** 2)).float().cuda()
